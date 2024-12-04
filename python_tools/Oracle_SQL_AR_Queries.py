@@ -1,6 +1,6 @@
 #リカルドに作れたプログラム
 #自動的なメールを送るのために。
-import oracledb
+import cx_Oracle as oracledb
 import time
 from datetime import date
 from datetime import timedelta
