@@ -1,0 +1,152 @@
+
+SQLcl Configuration Guide
+=================================
+
+1. Prerequisites
+---------------------------------
+Before configuring SQLcl, make sure you have:
+1. SQLcl Installed:
+   - Download SQLcl from the Oracle website: https://www.oracle.com/database/technologies/appdev/sqlcl.html
+   - Install it or extract it to a known directory (e.g., C:\Program Files\sqlcl).
+
+2. Java Runtime (JDK):
+   - SQLcl requires JDK 11 or later.
+   - Install a compatible JDK (e.g., Temurin JDK or Oracle JDK).
+   - Make sure you know its installation path (e.g., C:\Users\<YourUsername>\AppData\Local\Programs\Eclipse Adoptium\jdk-21.x.x).
+
+2. Configuring SQLcl
+---------------------------------
+Set Environment Variables
+1. Define JAVA_HOME:
+   - Points to the JDK installation folder.
+   - Example:
+     set JAVA_HOME=C:\Users\<YourUsername>\AppData\Local\Programs\Eclipse Adoptium\jdk-21.x.x
+
+2. Update PATH:
+   - Add the JDK’s bin folder to the system path.
+   - Example:
+     set PATH=%JAVA_HOME%\bin;%PATH%
+
+Navigate to the SQLcl Directory
+- Move to the bin folder of SQLcl:
+  cd "C:\Program Files\sqlcl\bin"
+
+3. Connecting to a Database
+---------------------------------
+To connect, use the following syntax:
+  sql username/password@//hostname:port/service_name
+
+Example:
+  sql apps/pr4d1ppsrv@//10.32.252.244:1521/DBGLPRD
+
+4. Automating with a Script
+---------------------------------
+Windows Script:
+Create a .bat file for convenience:
+
+  @echo off
+  REM Set up Java environment
+  set JAVA_HOME=C:\Users\<YourUsername>\AppData\Local\Programs\Eclipse Adoptium\jdk-21.x.x
+  set PATH=%JAVA_HOME%\bin;%PATH%
+
+  REM Navigate to SQLcl folder
+  cd "C:\Program Files\sqlcl\bin"
+
+  REM Connect to database
+  sql apps/pr4d1ppsrv@//10.32.252.244:1521/DBGLPRD
+
+- Save it as connect_sqlcl.bat.
+- Run it from the Command Prompt.
+
+5. Running SQL Queries
+---------------------------------
+Once connected, you’ll see the SQL> prompt. You can then run SQL commands like:
+  SELECT * FROM employees;
+
+To Exit:
+  Type: EXIT;
+
+6. Troubleshooting
+---------------------------------
+Error: Requires JDK 11 or later:
+- Ensure JAVA_HOME is pointing to a compatible JDK version.
+- Test it:
+  java -version
+
+Cannot Find SQLcl:
+- Make sure you are in the bin folder of SQLcl:
+  cd "C:\Program Files\sqlcl\bin"
+
+Connection Issues:
+- Verify:
+  - Username/Password: Are they correct?
+  - Hostname/Port: Is the database accessible?
+  - Service Name: Is it accurate (e.g., DBGLPRD)?
+
+7. Pro Tips
+---------------------------------
+Save Connection for Reuse:
+Inside SQLcl, you can save a connection:
+  saveconn my_connection_name
+Reuse it:
+  sql my_connection_name
+
+Use a Shell Script (Linux/Mac):
+For Linux/Mac, create a .sh script:
+
+  #!/bin/bash
+  export JAVA_HOME=/path/to/jdk
+  export PATH=$JAVA_HOME/bin:$PATH
+  /path/to/sqlcl/bin/sql apps/pr4d1ppsrv@//10.32.252.244:1521/DBGLPRD
+
+8. Resources
+---------------------------------
+- SQLcl Official Docs: https://www.oracle.com/database/technologies/appdev/sqlcl.html
+- JDK Downloads:
+  - Temurin JDK: https://adoptium.net/
+  - Oracle JDK: https://www.oracle.com/java/technologies/javase-downloads.html
+
+
+⠀⠀⠀⢀⡜⠉⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡻⣯⠿⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡩⢏⠭⣩⢥⢫⡝⣯⣻⣽⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢁⡜⠀
+⠀⠀⠀⡞⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡻⢁⠄⠂⣴⣾⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣫⣞⣵⣞⣯⣿⣷⣿⢾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⡏⠀⠀
+⠀⠀⠀⠳⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣽⣿⣿⣷⣀⣼⣿⣿⡿⢋⡠⠑⠬⡝⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣻⣏⣟⣳⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀
+⠀⠀⠀⠀⣸⣿⡿⠋⢰⣿⣿⣿⣿⣿⣽⣿⣿⣿⣿⣿⣿⣿⡟⠡⣆⡌⡙⢶⡨⠣⣲⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀
+⠰⡸⣄⠀⣿⠋⠀⠀⣾⣿⣿⣿⣿⣯⣿⣿⣿⣿⣿⣿⣿⣿⣷⡥⠹⣿⣶⣤⣱⣝⣾⣿⣿⣿⣿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧
+⠀⠉⠚⢛⣧⠀⠀⢠⣿⣿⣿⣿⣿⠿⠿⠛⣿⢻⡛⣿⠻⠿⢿⣿⣏⢿⣿⣿⣾⡝⢾⠽⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷
+⠀⠀⠀⢸⠘⠧⠔⣹⣿⣿⣿⡼⡲⢀⠀⠀⠣⡈⣰⣿⡀⠀⡐⢌⢻⣦⡙⣿⣿⣷⣮⣧⣼⣿⣿⣿⣿⣿⣿⣿⡟⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣯⡝⣿⣿⣿⣿⣿⣿
+⠀⠀⢀⡄⠳⠤⠞⣻⡿⡟⢰⡒⠍⠀⠀⠀⠀⢠⠃⣿⠙⠒⠒⡌⠲⢬⡝⣣⢟⣽⣿⡿⢿⣿⢿⣿⣿⣿⣿⡑⣿⣵⣢⢡⡉⢿⣼⣿⣿⣿⣿⣿⣿⣽⣻⣿⡷⣝⢮⢿⣿⣿⣽⣿
+⠀⠀⠈⠚⢦⣶⡿⣯⣽⠁⠀⠐⠈⠀⠂⠐⠀⠸⡀⢣⣧⡀⢂⠰⣉⢦⡹⣱⠯⢊⠁⠐⠀⠌⠙⠾⣭⡻⢿⣿⣽⡛⢿⣧⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⣻⣿⣯⣟⣾⣿⣿⡟⣿
+⠀⠀⠀⢀⣴⣯⣿⣿⡟⠀⠈⠐⠀⠄⠀⢂⠠⢀⠐⡠⢉⠱⡋⢴⣈⢦⠗⠁⠀⠀⠀⠀⠀⠀⠀⠂⣈⠻⣏⣟⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡿⣾⣿⣿⣿⣿
+⠀⠀⢠⣿⣿⣿⣿⣿⣷⠀⠐⢨⠐⠈⠐⠀⠒⡄⢳⠘⡆⣧⢹⣦⡝⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡆⢩⢻⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⣰⣿⣿⣿⣿⣿⣿⣿⡄⣒⢢⡱⣘⢢⡙⡴⣱⢎⡳⣵⢮⣗⣿⠁⢂⠅⠠⠀⠄⣀⡀⣄⣤⢂⡌⢀⠤⢉⠶⣹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⣳⡵⣎⣧⣛⡶⣽⣞⡿⣽⣻⣾⣇⡚⡤⢊⠄⣁⠲⣰⢮⣵⢿⣝⡲⢂⠌⣊⠶⣱⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⢸⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣻⡾⣽⣟⣷⣿⣻⣿⢿⡿⣶⡹⢆⡣⠜⣠⢃⢳⣛⠾⣏⠞⠥⣃⠞⣤⢫⡵⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣛⢟⡻⡹⠯⣝⠳⣍⠻⡜⢷⣻⡽⣬⠳⣄⢫⠖⣬⠳⣜⢪⡵⡸⣜⢦⣳⣽⣳⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢆⡡⢎⠲⣑⠣⢌⠣⢌⠣⠜⡢⠻⣷⣭⢿⣜⣯⠾⣵⣻⡜⣷⢺⣵⣫⢾⣳⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⡜⢦⡉⠖⠠⠑⡈⢒⠌⡒⡍⠴⢡⢈⠻⣾⣛⣾⣻⢷⣯⣟⣾⣻⢶⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠀⢹⡜⠢⠐⠀⡁⠂⠌⢄⠃⠴⢈⠆⡡⢂⠰⢈⠛⣷⣿⣟⣾⣽⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢻
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡍⠆⡑⠠⠐⠡⢈⠐⡈⠤⢁⠂⡑⠬⡑⢬⡘⠴⣩⢟⡿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡘⠄⢠⠁⠌⡐⠀⠂⠄⡀⠂⠌⢠⠑⡘⢤⡙⡜⢦⣛⡼⣽⣻⢾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣿⡟⠃⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠠⠁⠀⡌⠒⡀⠁⠐⠀⢀⠠⠐⠠⠘⡈⠆⣜⡸⢣⡝⣾⣱⢯⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠁⠀⢹⣇⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⡡⠐⢄⠱⢀⠂⠄⠂⠀⠄⢂⠡⡁⠆⢭⢰⡱⣓⢮⡳⣝⣾⣳⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⡞⠀⠀⡄⠈⠫⠵⠂⠀⠐
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠃⠠⠘⡀⢱⢂⠌⡐⠠⣈⠐⡠⢑⠌⡱⢊⢦⠳⣍⢾⡱⢯⣞⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠃⣿⠙⠀⣇⠀⣠⠃⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠄⠡⠄⣙⣮⠐⠤⠑⡄⠚⠤⣉⠖⡱⢋⠮⣝⣚⢮⡝⡳⢮⡹⢧⣻⠋⢿⡿⢿⡿⠟⠛⠋⠁⣼⡇⠀⠀⢿⣧⠀⠈⠉⠁⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡏⢠⠐⡀⠂⠤⣹⠌⢂⠱⡈⡡⢃⠔⡊⢥⢋⡜⠦⣍⢶⡩⡝⢦⡙⢦⠹⣷⡘⠇⠈⠀⠀⠀⠀⠀⠸⢯⣔⠀⠀⠉⠓⠬⠄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡘⢀⠢⢡⠀⡉⢂⠐⠈⠄⠡⢀⠱⢈⠂⢍⠢⡱⢌⡳⠜⢦⡓⣍⠒⡌⠦⣙⠶⣫⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⢠⡓⢆⠢⡁⢄⠈⡐⢠⠁⡂⠔⡨⠘⢤⠓⣜⠢⣝⢪⠳⣜⡰⣍⢒⡅⢎⡜⢥⢫⢞⡷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁⢢⢙⡎⡴⣁⠆⣅⠒⡄⢢⡑⡘⣄⠫⣔⡩⢆⡻⣔⣫⢳⣌⢳⣌⢲⡘⠤⢚⠄⢣⠎⠼⡙⡦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢈⠦⡍⢞⡱⣬⢚⢤⢋⡜⢢⢱⠱⣌⢳⣬⢳⢫⡳⡵⢎⡳⡜⣧⡚⢦⢍⠚⠤⡙⡀⢎⠡⠓⢬⠑⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠘⡲⣉⡎⡷⣬⣋⠾⡜⣜⣣⢧⣛⡬⣗⢮⣏⢷⡽⣭⢏⣷⣹⠶⣙⢮⡘⢥⠃⡔⢠⠊⡔⡉⠦⡩⢌⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⢀⢳⡱⢮⢵⡳⣭⢻⡝⡾⣜⢧⣳⣝⣞⣧⢯⣳⣻⣜⢯⠶⣭⢳⡝⢦⡙⠦⡑⢌⢂⠡⡐⠌⡱⢘⡂⢎⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⡃⠎⠵⣟⢶⣹⢭⢷⡻⡽⣞⢯⣳⡞⡷⣞⣯⣳⢷⣫⢯⣛⣮⢳⡝⢮⡙⣖⠩⣂⢃⠆⡘⠤⣁⠳⡘⢦⠸⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⢄⠛⢤⠛⢧⣛⡼⣇⢿⣻⡼⣟⡧⢿⡻⣇⣧⣻⡜⣧⡟⣼⡸⣇⡼⢇⡻⡄⢧⡘⡄⠸⠠⡀⢄⢣⠸⣀⠇⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢰⢉⠢⠘⠤⡙⢢⡙⢾⡭⣞⡵⣛⡮⣝⢯⡽⣹⢖⣳⢽⣲⣛⢶⡹⢞⣜⠧⡓⠩⠁⠔⠠⢁⢃⠘⡰⣈⠖⣡⠞⡸⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢸⢨⠄⠃⠔⣀⠃⡜⢢⠝⡾⣜⢧⡻⣜⠧⣯⢵⣚⢧⣛⢶⡹⣎⠝⢪⠁⠌⠤⢁⠱⡈⠔⡀⠎⠤⡑⢢⠚⡤⣋⠴⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠸⢂⠎⡁⠒⢀⠒⢌⢢⠙⢬⢛⣮⡳⢎⡟⣴⢣⡟⣎⢧⡻⠞⠁⢎⠀⢊⡐⠄⠂⡐⢀⠂⢡⢈⡐⠡⢎⡱⡱⡭⣞⣼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡇⡍⠆⡑⢈⠄⢊⠆⠥⢋⠆⡭⢒⡟⣿⣾⣧⣿⣼⡽⠊⠔⠠⢉⠠⠘⠠⢀⠂⠅⡐⠈⡄⠡⢂⠌⡱⣊⠶⣹⣳⢽⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡇⠸⡄⡑⠠⠈⡄⠊⡜⢠⢋⠴⣉⢞⠶⣽⣻⡿⣋⣀⣌⣄⣡⡀⢂⠌⡐⠠⡈⢐⠠⡁⢄⠣⣈⢆⡱⣍⣞⣳⢯⣟⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⣕⠢⢁⢂⠡⠀⢃⠰⡁⢎⠲⣉⢮⡻⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⣁⠒⡈⡐⡐⢨⠐⡔⢪⠴⣫⢞⣽⣻⢾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣥⡂⠆⣁⠂⢒⡈⢆⠳⣍⢶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣥⢐⠐⢢⠑⣬⢣⣟⣭⢿⡾⣽⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣷⣦⣼⣄⣘⣤⣓⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣜⠤⡹⣔⡯⡾⣝⣯⣟⣷⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⡵⣫⣽⣻⡽⣾⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠸⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠷⠯⠷⠿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
