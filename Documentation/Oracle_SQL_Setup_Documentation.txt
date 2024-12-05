@@ -1,0 +1,136 @@
+
+Setting up Oracle SQL Queries with a Virtual Python Environment in a Debian PRoot Emulator
+=========================================================================================
+
+1. System Details
+-----------------
+- Environment: Debian PRoot emulator.
+- Python Version: 3.11.2
+- Oracle Instant Client: ARM64 (instantclient-basiclite-linux.arm64-19.25.0.0.0dbru.zip).
+- Dependencies: cx_Oracle (or oracledb), libaio.so.1.
+
+2. Steps to Reproduce
+---------------------
+
+A. Install Dependencies
+-----------------------
+1. Update Package List:
+   ```bash
+   apt-get update
+   ```
+
+2. Install Required Libraries:
+   ```bash
+   apt-get install python3 python3-venv libaio1:arm64
+   ```
+
+B. Set Up Oracle Instant Client
+-------------------------------
+1. Download and Extract Instant Client:
+   ```bash
+   wget <URL_TO_ZIP_FILE>
+   unzip instantclient-basiclite-linux.arm64-19.25.0.0.0dbru.zip
+   ```
+
+2. Set LD_LIBRARY_PATH:
+   Add the path to your Oracle Instant Client in the environment:
+   ```bash
+   export LD_LIBRARY_PATH=/root/instantclient_19_25:/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+   ```
+
+3. Verify Dependencies:
+   Use `ldd` to check for missing libraries:
+   ```bash
+   ldd /root/instantclient_19_25/libclntsh.so.19.1
+   ```
+   Ensure all dependencies are resolved (especially libaio.so.1).
+
+C. Create a Python Virtual Environment
+--------------------------------------
+1. Set Up the Virtual Environment:
+   ```bash
+   python3 -m venv myenv
+   source myenv/bin/activate
+   ```
+
+2. Install Python Modules:
+   Inside the virtual environment, install cx_Oracle or oracledb:
+   ```bash
+   pip install cx_Oracle
+   ```
+   Or:
+   ```bash
+   pip install oracledb
+   ```
+
+3. Verify Installation:
+   Test importing the module:
+   ```bash
+   python -c "import cx_Oracle; print('cx_Oracle is working!')"
+   ```
+
+D. Run the Script
+-----------------
+1. Activate the Virtual Environment:
+   ```bash
+   source myenv/bin/activate
+   ```
+
+2. Run Your Python Script:
+   ```bash
+   python3 Oracle_SQL_AR_Queries.py
+   ```
+
+3. Expected Output:
+   The script should connect to Oracle DB and execute queries without issues.
+
+3. Notes and Challenges
+-----------------------
+- Virtual Environment: Needed due to restrictions in PRoot-managed environments (error: externally-managed-environment).
+- Library Dependencies: libaio.so.1 is crucial for Oracle Instant Client to work.
+- Environment Variables: Ensure LD_LIBRARY_PATH is correctly set every time you start the environment.
+
+4. Tips for Troubleshooting
+---------------------------
+- Missing Dependencies: Use ldd to check unresolved libraries.
+- Environment Issues: Ensure the virtual environment is activated (source myenv/bin/activate).
+- PRoot Emulation: Be mindful of emulation-specific restrictions and resolve them with workarounds (e.g., virtual environments).
+
+https://chatgpt.com/g/g-VbyZ6PbZL-mei-ya-yi-ultimate-super-assistant-waifu/c/6750db64-0540-8006-ac38-6ce7cb55b9f5
+
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣰⣤⣴⣶⡾⣹⢟⣟⡻⣝⢶⡲⣤⣄⡀⠈⠙⠿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⢿⡻⣿⣧⣿⡽⣧⣻⣜⡳⣝⢮⣳⢳⢮⡽⣖⣄⠀⠈⠙⠻⠿⣿⣿⣿⣿⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣞⣿⣿⣿⣿
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾⢿⡝⣾⣽⣿⢿⣟⣧⣿⠯⡽⢭⡳⣝⣮⢳⢏⡾⡼⣽⣻⣷⣄⠀⠀⠀⠀⠉⠛⠿⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣯⢿⣿⣿
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⢻⡽⣞⡿⣿⣿⣧⣽⣿⣿⢻⡟⣝⡧⣿⣽⢻⡜⡯⣞⢽⡹⣭⢟⡿⣾⣧⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⣿⣶⣦⣤⣀⡀⠀⠀⠀⠀⠀⠀⠹⣯⢿⣻
+⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⢴⡾⣟⡳⣎⢯⡳⣽⡞⣿⣾⢟⡿⣮⣿⣣⢿⣯⢞⣳⡼⢧⣯⢷⡞⣯⢻⡵⣺⠵⣷⣚⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⢿⡿⣿⣿⣷⣦⣄⡀⠀⠀⠀⢹⣏⢷
+⣝⣻⣿⣶⣶⡶⢶⠶⣯⢿⡻⣞⢯⣓⣻⣽⡷⣟⢯⣳⣿⣿⣯⣿⡿⣿⡟⣽⢏⣮⡟⣷⢺⣗⡯⢗⠾⣱⣯⡼⢧⡻⣽⢾⣹⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠳⣻⢿⣿⣿⣿⣶⣄⠀⠈⣾⣹
+⣿⣿⣿⣿⣿⣿⣿⣿⣞⣷⣷⣻⣶⣫⣿⣶⣿⣾⣿⣿⣿⣿⣿⠿⣿⡿⣽⣏⣾⢳⣝⣮⢿⣱⠿⡾⡽⣱⢮⡝⣧⣿⡿⢾⣳⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣞⡽⣿⣿⣿⣷⣦⡷⣭
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⣶⡾⣿⡟⣼⣳⣿⠿⣞⣫⠽⣭⣷⡿⠿⠛⢋⣽⣿⣹⣯⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣹⢿⣽⣿⣿⡿⣜
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⣽⣿⣿⣘⡱⣿⣻⣿⣿⣶⣦⣌⡳⣍⠉⠀⠀⢀⣴⣿⣻⢶⣿⣳⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣞⡽⣿⣿⣳⡝
+⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢏⣻⣽⣿⣿⣿⡸⢻⣽⠃⠻⢟⣛⣻⡾⠸⡗⠀⠶⠿⠛⠋⡵⣻⣯⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡞⡽⣿⣣⢽
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⣿⣿⣿⡿⣯⣽⣻⣿⡯⣽⡟⡇⡇⠈⣿⠀⠐⠀⠀⠀⠀⠀⢀⣤⣤⣓⡳⢶⣽⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣽⠷⣭⢞
+⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⢹⣿⣿⣿⣾⣿⣷⡿⣼⣇⠟⣧⠀⢿⠀⠀⠀⠀⠀⠀⣼⠋⠿⣟⣽⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⣯⢟⡼⣫
+⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣟⣿⣽⣿⢲⣿⡟⣼⣇⢸⠀⠀⣀⡀⠀⡴⠟⠀⣠⣿⣿⣿⣿⣿⣿⣿⠙⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡾⣝⣮⢟⡵
+⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⡐⠸⣿⣿⣿⣿⣿⣺⣿⢧⣿⡟⣴⣻⣧⡀⠀⠐⠛⣃⣀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⡆⠈⠻⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣯⢟⣎⡵⣫⣞
+⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠁⢻⡟⣽⡿⣣⣿⣿⣷⣿⡟⣹⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⡄⠀⠀⠹⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣞⣿⣵⢿⣎⢿⣵⣿
+⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠹⣯⢿⡿⢿⣿⠿⠻⣆⠏⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡵⣿⣗⢤⡀⠘⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⢾⣟⡽⣺⢭⣳⣾⣿⣿⣿
+⡟⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⡄⠀⠀⠀⠀⢫⣟⢾⡶⣤⣀⣀⠈⠀⠀⠃⠙⠻⢿⣿⠿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣣⢟⡦⣌⠑⠢⢝⣶⣄⣀⣀⣀⣠⣤⣴⢾⣻⣞⠿⣜⡳⣽⣾⣿⣿⢿⣛⣾
+⠀⠀⠀⠀⠀⠀⠀⠀⣩⣿⣿⡿⡦⠀⠀⠀⠈⢿⣞⡲⣇⢯⣝⡻⡽⣶⣤⣄⠀⠀⠈⠻⣔⡏⡶⣩⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣞⣟⣯⣿⡽⡿⢿⡟⣯⠷⣭⣻⣼⡿⢿⡻⡽⣭⣳⣿⣾
+⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⢟⣻⣧⠀⠀⠀⠀⠀⠈⠉⠛⠚⠚⠽⠟⣷⣿⣾⣷⡄⠀⠀⠈⠻⣷⡕⢮⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣿⣾⣷⣯⣾⣷⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⠀⠀⠀⣼⠟⣿⢣⠞⠃⠜⡄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀⠉⠻⣿⣿⡆⠀⠀⠀⠀⠉⠙⠚⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⠀⢀⡾⠋⠀⢿⡏⠀⠀⠑⡀⠄⠀⠀⠀⠀⠀⠀⠐⠂⠔⣬⣝⢦⡀⠈⢳⣿⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⣠⠟⠁⠀⠀⢸⡇⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⠀⠡⠈⡌⢻⠟⣎⣷⠀⠀⢻⣧⠀⠀⠀⠀⠀⠀⠀⠀⠘⠴⣳⣌⠉⠛⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣭
+⠀⢠⡾⠃⠀⠀⠀⢀⣿⣇⠀⠀⠀⠀⢱⠀⠀⠀⠀⠀⠀⠈⠱⡈⢇⠞⡴⠏⠀⠀⢸⡟⡆⠀⠀⠀⠀⠀⠀⠀⠨⢰⡰⣻⣶⣄⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⡛⠛⠻⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣴⡏⠀⠀⠀⠀⠀⣸⣿⣿⡄⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⢠⣾⣏⢷⠀⠀⠀⠀⠀⠀⠀⠀⢁⢚⣽⣿⣿⣧⡀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣷⢦⡀⠀⠀⠀⠉⠉⠛⠿⣿⣿⣿⣿
+⣿⣿⡄⠀⠀⠀⢀⣿⣿⣿⣷⡀⠀⠀⠀⠀⠱⣄⠀⠄⠀⠀⠀⠀⡀⠀⠠⢀⣴⣿⡟⡿⣿⣄⠀⠀⠀⠀⠀⠀⢀⣠⣞⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣆⠙⢷⣄⠀⠀⠀⠀⠀⠀⢉⣿⡿
+⣿⣿⣿⡄⠀⠀⢸⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠙⠲⢤⣬⣤⣥⣤⣶⣿⠿⣻⣱⣚⢷⠑⢟⣷⡶⣬⢤⡤⣵⢺⣱⣾⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⡆⠀⠙⣧⡀⢀⣠⣴⢾⣻⢞⡽
+⣿⣿⣿⣿⣄⠀⢸⣿⣿⣿⣿⣿⣷⡄⢀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⢀⡇⢾⡇⠀⠙⢺⣻⣶⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⡇⠀⣀⣽⣟⡯⢷⣫⢟⣞⡯⣽
+⣿⣿⣿⣿⣿⣆⠀⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠞⣨⠟⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣔⠊⠉⠙⠚⠛⠯⠷⢛⢮⡽⣳
+⣿⣿⣿⣿⣿⣿⣧⡹⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡮⠋⠀⠀⠀⠀⠀⠂⢼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⣀⠀⣀⣀⣴⠿⠋⠁⠀⠙⠻⢶⣶⣤⣤⣤⣤⣤⣶⣶⣿
+⣿⣿⣿⣿⣿⣿⣯⢿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⡑⠘⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠿⠿⢿⣽⣾⣿
+⣿⣿⣿⣿⣿⣿⣿⣮⢳⣏⡿⣿⣿⣿⣿⣿⣿⣿⣿⢢⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⡀⠐⠀⠛⠶⢆⡣⣍⠩⣉⠛⠛⠛⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣷⣎⠷⣛⡿⣿⣿⣿⣿⣿⣿⣧⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠹⣶⡄⠀⢀⠂⠑⡌⢣⡐⠌⡐⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⢀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⡳⣝⡻⢿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⠐⠈⣅⠒⠤⢀⠁⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⢽⣫⡝⡿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠈⠄⠠⣉⠂⡄⠈⠄⠐⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠀⡀⠀⠄
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣽⣳⢧⣯⣛⡿⡷⣤⣄⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠁⠀⠠⢈⠐⠠⠁⠄⠡⢘⡄⠀⠠⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂⠀⠠⠀⠐⡀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣾⣽⣽⣽⣣⣟⣭⠷⠟⠛⠋⠉⠉⠛⢷⣦⡀⠀⢂⠐⠠⢀⠠⠀⠠⠀⠌⠀⠁⠈⠠⠐⠞⣄⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠐⠀⠁⢠⣠⣾
